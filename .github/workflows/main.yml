@@ -1,0 +1,54 @@
+name: Matrix Test
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+      - dev
+
+concurrency:
+  group: ${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        target: [eval, cpp]
+        exclude:
+          # php is not available by default for macos runners, probably not worth bothering
+          - os: macos-latest
+            target: php
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: 4.3.7
+
+      - name: Setup hashlink
+        if: matrix.target == 'hl'
+        uses: HaxeFoundation/setup-hashlink@v1
+        with:
+          version: nightly
+
+      - name: Check hashlink
+        if: matrix.target == 'hl'
+        run: hl --version
+
+      - name: Setup haxelib
+        run: |
+          # haxelib newrepo
+          haxelib install haxelib.json
+          haxelib dev hxdemo .
+          haxelib list
+          haxe -version
+          neko -version
+
+      - name: Run tests
+        run: |
+          haxe --cwd tests build-${{ matrix.target }}.hxml

@@ -1,0 +1,6 @@
+--class-path src
+--library utest
+--library hxdemo
+--main Main
+--debug
+-D UTEST-PRINT-TESTS

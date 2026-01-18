@@ -1,0 +1,15 @@
+{
+  "name": "hxdemo",
+  "url" : "https://github.com/initdc/hxdemo",
+  "license": "Apache",
+  "tags": ["haxe", "lib", "demo"],
+  "description": "The Haxe library demo",
+  "version": "0.0.1",
+  "classPath": "src/",
+  "releasenote": "release library demo 0.0.1",
+  "contributors": ["initdc"],
+  "dependencies": {
+    "hxcpp": "4.3.2",
+    "utest": "1.13.2"
+  }
+}
